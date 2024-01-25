@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="description" content="This is a website where you can add photos to twibbon.">
+<meta name="author" content="Ferry Ayunda">
+<meta property="og:image" content="https://badut.netlify.app/og.png" />
+<title>Become a Real Clown With This Twibbon Generator</title>
+<!--
+In this modern era, it is the era of copy and paste. It's true that you look smart but you're actually stupid.
+-->
+<link rel="stylesheet" href= "/index.css">
+<link rel="alternate" type="application/rss+xml" title="RSS Feed for Twibbon Generator" href="index.xml">
+<link rel="canonical" href="https://badut.netlify.app/">
+<!-- Favicons -->
+<link rel="icon" href="/favicon.ico">
+<style>
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+}
+  
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+  
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+</style>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/fabric.min.js"></script>
+<script src="/js/filesaver.js"></script>
+<script src="/js/blob.js"></script>
+</head>
+<body>
+<article>
+    
+<h1>BADUT.NETLIFY.APP</h1>
+<div class="alert info">
+<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+<strong>Come on, vote!</strong> Enter your best photo with netizens ready to win Prabowo - Gibran elected President and Vice President 2024. Click <a href="/prabowogibran">HERE!</a>
+</div>
+<p>If you want to be funny, just call him a clown! with this twibbon and enter your best photo.</p>
+<p><canvas id="c"></canvas></p>
+<p>
+<p><span id="imgError"></span></p>
+<input type="file" id="uploadBtn" style="display: none">
+<input type="file" id="uploadFile" accept="image/png, image/jpeg" hidden/>
+<label class="btn black" for="uploadFile">Select file</label>
+<button id="download" class="btn blue">DOWNLOAD</button>
+</p>
+<h2>How to Make Twibbon:</h2>
+<p class="result"></p>
+<p>
+<ol>
+<li>Click the <strong>Select File</strong> button to upload your best photo.</li>
+<li>You can <strong>zoom</strong>, <strong>enlarge</strong> or <strong>reduce</strong> and <strong>pan the photo</strong>.</li>
+<li>If it is appropriate, click the <strong>Download</strong> button.</li>
+<li>Please click <strong>Share</strong> on your social media.</li>
+<li>Finished.</li>
+</ol>
+</p>
+<p>Share this twibbon on your social media, click <strong><em>Share</em></strong>.</p>
+</article>
+<footer>
+<p><a href="https://www.facebook.com/teteg.atii">© <span id="copyright"></span>  Ferry Ayunda, All rights reserved</a>.</p>
+</footer>
+<script>
+let shareData = {
+title: 'Twibbon Generator',
+text: 'If you want to be funny, just call him a clown!',
+url: 'https://badut.netlify.app/',
+}
+
+const btn = document.querySelector('em');
+const resultPara = document.querySelector('.result');
+
+btn.addEventListener('click', () => {
+navigator.share(shareData)
+.then(() =>
+resultPara.textContent = 'Twibbon has been successfully shared.'
+)
+.catch((e) =>
+resultPara.textContent = 'Error: ' + e
+)
+});
+
+</script>
+<script>
+document.getElementById("uploadBtn").onchange = function () {
+document.getElementById("uploadFile").value = this.files[0].name;
+};
+var canvas = new fabric.Canvas('c');    
+canvas.setWidth(1024);
+canvas.setHeight(1024);
+canvas.backgroundColor = 'rgba(0,0,255,0.3)';
+    
+var canvasWrapper = document.getElementById('c');
+var canvasWrapperWidth = canvasWrapper.clientWidth;
+$(function () {
+$(":file").change(function () {
+if (this.files && this.files[0]) {
+var reader = new FileReader();
+reader.onload = imageIsLoaded;
+reader.readAsDataURL(this.files[0]);
+}
+});
+});
+fabric.Image.fromURL('/twibbon.png',function(img){
+img.scaleToWidth(canvas.getWidth());
+canvas.setOverlayImage(img, canvas.renderAll.bind(canvas));
+});
+function imageIsLoaded(e) {
+fabric.Image.fromURL(e.target.result,function(img){
+var aspectRatio = 1024/1024;
+var factor = 1024 / img.width;
+img.set({
+scaleX: factor,
+scaleY: factor 
+});
+canvas.add(img);
+canvas.item(0).set({
+borderColor: 'white',
+cornerColor: 'black',
+cornerSize: 50,
+borderScaleFactor: 10,
+hasBorders: true,
+                                                
+rotatingPointOffset:200,
+padding:70, 
+transparentCorners: true
+});
+canvas.setActiveObject(canvas.item(0));
+this.__canvases.push(canvas);
+canvas.sendToBack(img);
+});
+};
+$("#download").click(function(){
+$("#c").get(0).toBlob(function(blob){
+saveAs(blob, "twibbon.png");
+});
+});
+canvas.selection = false;
+this.__canvases.push(canvas);
+fabricCanvas.setDimensions({
+  width: '100%',
+  height: '100%'
+},{
+  cssOnly: true
+});
+</script>
+<script>
+document.getElementById("copyright").innerHTML = new Date().getFullYear();
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+$('#download').bind("click",function() 
+{ 
+var imgVal = $('#uploadFile').val(); 
+if(imgVal=='') 
+{ 
+// swal("Error!", "Tidak ada file yang dipilih! Lanjutkan Download?"); 
+document.getElementById("imgError").innerHTML = "Error!, Tidak ada file yang dipilih! Lanjutkan Download?";
+document.getElementById("imgError").style.color = "red";
+} 
+return false; 
+
+}); 
+});
+</script> 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+var close = document.getElementsByClassName("closebtn");
+var i;
+
+for (i = 0; i < close.length; i++) {
+  close[i].onclick = function(){
+    var div = this.parentElement;
+    div.style.opacity = "0";
+    setTimeout(function(){ div.style.display = "none"; }, 600);
+  }
+}
+</script>
+</body>
+</html>
